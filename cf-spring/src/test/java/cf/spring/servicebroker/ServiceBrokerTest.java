@@ -35,6 +35,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.UUID;
@@ -207,7 +208,7 @@ public class ServiceBrokerTest extends AbstractServiceBrokerTest {
 				.setEntity(new StringEntity(mapper.writeValueAsString(bindBody), ContentType.APPLICATION_JSON))
 				.build();
 		final CloseableHttpResponse bindResponse = client.execute(bindRequest);
-		assertEquals(bindResponse.getStatusLine().getStatusCode(), 200);
+		assertEquals(bindResponse.getStatusLine().getStatusCode(), HttpServletResponse.SC_CREATED);
 		assertEquals(bindCounter.get(), 1);
 		final JsonNode bindResponseJson = mapper.readTree(bindResponse.getEntity().getContent());
 		assertTrue(bindResponseJson.has("credentials"));
@@ -227,7 +228,7 @@ public class ServiceBrokerTest extends AbstractServiceBrokerTest {
 				.setUri(bindingUri + "?service_id=" + BROKER_ID_STATIC + "&" + "plan_id=" + PLAN_ID)
 				.build();
 		final CloseableHttpResponse unbindResponse = client.execute(unbindRequest);
-		assertEquals(unbindResponse.getStatusLine().getStatusCode(), 200);
+		assertEquals(unbindResponse.getStatusLine().getStatusCode(), HttpServletResponse.SC_OK);
 		assertEquals(unbindCounter.get(), 1);
 	}
 
@@ -242,7 +243,7 @@ public class ServiceBrokerTest extends AbstractServiceBrokerTest {
 				.setUri(instanceUri + "?service_id=" + BROKER_ID_STATIC + "&" + "plan_id=" + PLAN_ID)
 				.build();
 		final CloseableHttpResponse deprovisionResponse = client.execute(deprovisionRequest);
-		assertEquals(deprovisionResponse.getStatusLine().getStatusCode(), 200);
+		assertEquals(deprovisionResponse.getStatusLine().getStatusCode(), HttpServletResponse.SC_OK);
 		assertEquals(deprovisionCounter.get(), 1);
 	}
 
@@ -254,7 +255,7 @@ public class ServiceBrokerTest extends AbstractServiceBrokerTest {
 				.setEntity(new StringEntity(mapper.writeValueAsString(provisionBody), ContentType.APPLICATION_JSON))
 				.build();
 		final CloseableHttpResponse provisionResponse = client.execute(provisionRequest);
-		assertEquals(provisionResponse.getStatusLine().getStatusCode(), 404);
+		assertEquals(provisionResponse.getStatusLine().getStatusCode(), HttpServletResponse.SC_NOT_FOUND);
 		final JsonNode errorJson = mapper.readTree(provisionResponse.getEntity().getContent());
 		assertTrue(errorJson.has("description"));
 	}
@@ -269,7 +270,7 @@ public class ServiceBrokerTest extends AbstractServiceBrokerTest {
 			  .setEntity(new StringEntity(mapper.writeValueAsString(provisionBody), ContentType.APPLICATION_JSON))
 			  .build();
 		final CloseableHttpResponse provisionResponse = client.execute(provisionRequest);
-		assertEquals(provisionResponse.getStatusLine().getStatusCode(), 200);
+		assertEquals(provisionResponse.getStatusLine().getStatusCode(), HttpServletResponse.SC_CREATED);
 		assertEquals(provisionCounter.get(), 1);
 
 		final JsonNode provisionResponseJson = mapper.readTree(provisionResponse.getEntity().getContent());

@@ -19,9 +19,13 @@ package cf.spring.servicebroker;
 import cf.common.JsonObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * The response returned to the Cloud Controller after a successful bind. Methods annotated with {@code @Bind} must
- * return an instance of this type.
+ * return an instance of this type. This is to be used when a successful binding occurs as the Cloud Controller
+ * expects a 201 status code. When the exact same request has already been made previously, one should use
+ * {@link BindResponseIdentical} instead, to be able to return a 200 status code to the Cloud Controller
  *
  * @author Mike Heath <elcapo@gmail.com>
  */
@@ -63,5 +67,9 @@ public class BindResponse extends JsonObject {
 	@JsonProperty("syslog_drain_url")
 	public String getSyslogDrainUrl() {
 		return syslogDrainUrl;
+	}
+
+	public int getHttpStatusCode() {
+		return HttpServletResponse.SC_CREATED;
 	}
 }

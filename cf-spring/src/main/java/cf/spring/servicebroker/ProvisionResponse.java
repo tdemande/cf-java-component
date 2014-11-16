@@ -20,8 +20,14 @@ import cf.common.JsonObject;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * The response returned to the Cloud Controller after a service has been successfully provisioned.
+ * This is to be used when a successful provision occurs as the Cloud Controller expects a 201 status code.
+ * When the exact same request has already been made previously, one should use
+ * {@link cf.spring.servicebroker.ProvisionResponseIdentical} instead, to be able to instead
+ * return a 200 status code to the Cloud Controller
  *
  * @author Mike Heath <elcapo@gmail.com>
  */
@@ -45,5 +51,9 @@ public class ProvisionResponse extends JsonObject {
 	@JsonProperty(DASHBOARD_URL_PROPERTY)
 	public String getDashboardUrl() {
 		return dashboardUrl;
+	}
+
+	public int getHttpStatusCode() {
+		return HttpServletResponse.SC_CREATED;
 	}
 }

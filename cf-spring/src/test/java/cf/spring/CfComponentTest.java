@@ -123,7 +123,7 @@ public class CfComponentTest {
 			HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
 			HttpGet get = new HttpGet("http://" + natsAnnouncement.getHost() + "/varz");
 			final HttpResponse response = client.execute(get);
-			assertEquals(200, response.getStatusLine().getStatusCode());
+			assertEquals(response.getStatusLine().getStatusCode(), 200);
 			final JsonNode node = new ObjectMapper().readTree(response.getEntity().getContent());
 			assertEquals(node.get("type").asText(), "Test");
 			assertEquals(node.get("index").asInt(), componentConfiguration.getIndex());
@@ -160,7 +160,7 @@ public class CfComponentTest {
 			HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
 			HttpGet get = new HttpGet("http://" + natsAnnouncement.getHost() + "/varz");
 			final HttpResponse response = client.execute(get);
-			assertEquals(200, response.getStatusLine().getStatusCode());
+			assertEquals(response.getStatusLine().getStatusCode(), 200);
 			final JsonNode node = new ObjectMapper().readTree(response.getEntity().getContent());
 			assertEquals(node.get("type").asText(), "Test");
 			assertEquals(node.get("test").asText(), "value");
